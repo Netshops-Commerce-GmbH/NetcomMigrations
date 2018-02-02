@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Services -->
+        <service id="netcom_migrations.components.file_tokenizer" class="NetcomMigrations\Components\FileTokenizer"/>
+        <service id="netcom_migrations.components.stub_generator" class="NetcomMigrations\Components\StubGenerator"/>
+        <service id="netcom_migrations.components.dbal.migrations_gateway"
+                 class="NetcomMigrations\Components\Dbal\MigrationsGateway">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+        <service id="netcom_migrations.command.migrate_up_command.symfony_style"
+                 class="Symfony\Component\Console\Style\SymfonyStyle"/>
+        <service id="netcom_migrations.components.migrations.executor"
+                 class="NetcomMigrations\Components\Migrations\Executor">
+            <argument type="service" id="netcom_migrations.components.file_tokenizer"/>
+            <argument type="service" id="netcom_migrations.components.dbal.migrations_gateway"/>
+            <argument type="service" id="service_container"/>
+        </service>
+        <service id="netcom_migrations.components.migrations.status"
+                 class="NetcomMigrations\Components\Migrations\Status">
+            <argument type="service" id="netcom_migrations.components.dbal.migrations_gateway"/>
+            <argument>%netcom_migrations.migrations_dir%</argument>
+        </service>
+    </services>
+</container>

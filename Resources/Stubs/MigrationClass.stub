@@ -1,0 +1,30 @@
+<?php
+
+use \NetcomMigrations\Components\Migrations\Migration;
+
+/**
+ * Class :CLASS:
+ */
+class :CLASS: extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function up()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function down()
+    {
+    }
+}
