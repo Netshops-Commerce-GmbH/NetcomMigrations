@@ -134,6 +134,7 @@ New variables have to be defined in `\NetcomMigrations\Command\CreateCommand` wh
 
 ## ToDo
 
+- Add unit tests.
 - Implement a DI container tag that allows other plugins to register a MigrationStructCollector which would support providing migrations in the context of plugins.
 - Add CLI option to `MigrateDownCommand` and `MigrateUpCommand` to toggle the maintenance mode while migrations are running.
 - Add CLI option to `MigrateDownCommand` and `MigrateUpCommand` for auto-rollback if a migration fails.
