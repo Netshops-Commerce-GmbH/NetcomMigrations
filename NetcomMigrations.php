@@ -41,19 +41,6 @@ class NetcomMigrations extends Plugin
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws \LogicException
-     */
-    public function registerCommands(Application $application)
-    {
-        $application->add(new CreateCommand());
-        $application->add(new MigrateDownCommand());
-        $application->add(new MigrateUpCommand());
-        $application->add(new StatusCommand());
-    }
-
-    /**
      * Returns absolute path to Shopware root directory.
      *
      * @return string
@@ -71,18 +58,20 @@ class NetcomMigrations extends Plugin
     }
 
     /**
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \RuntimeException
      */
     private function executeInstallSql()
     {
         $sqlPath = $this->getPath() . '/Resources/sql/install.sql';
 
-        if (!file_exists($sqlPath)) {
+        if (!\file_exists($sqlPath)) {
             throw new \RuntimeException(sprintf('Import file "%s" does not exists', $sqlPath));
         }
 
         $this->container->get('dbal_connection')->exec(
-            file_get_contents($sqlPath)
+            \file_get_contents($sqlPath)
         );
     }
 }

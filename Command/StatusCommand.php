@@ -2,6 +2,7 @@
 
 namespace NetcomMigrations\Command;
 
+use NetcomMigrations\Components\Migrations\Status;
 use NetcomMigrations\Components\Structs\MigrationStruct;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,6 +16,26 @@ class StatusCommand extends ShopwareCommand
 {
     /** @var SymfonyStyle $io */
     protected $io;
+    /** @var string $commandName */
+    private $commandName;
+    /** @var Status $migrationStatus */
+    private $migrationStatus;
+
+    /**
+     * StatusCommand constructor.
+     *
+     * @param string $commandName
+     * @param Status $migrationStatus
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     */
+    public function __construct(string $commandName, Status $migrationStatus)
+    {
+        $this->commandName = $commandName;
+        $this->migrationStatus = $migrationStatus;
+
+        parent::__construct($this->commandName);
+    }
 
     /**
      * {@inheritdoc}
@@ -23,7 +44,7 @@ class StatusCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('netcom:migrations:status')
+        $this->setName($this->commandName)
             ->setDescription('Shows the status of all migrations.');
     }
 
@@ -61,11 +82,9 @@ class StatusCommand extends ShopwareCommand
      */
     private function getPendingMigrations(): array
     {
-        $status = $this->container->get('netcom_migrations.components.migrations.status');
-
         $migrations = [];
 
-        foreach ($status->getPendingMigrations() as $migration) {
+        foreach ($this->migrationStatus->getPendingMigrations() as $migration) {
             $migrations[] = $this->createTableDataFromMigrationStruct($migration);
         }
 
@@ -78,11 +97,9 @@ class StatusCommand extends ShopwareCommand
      */
     private function getFinishedMigrations(): array
     {
-        $status = $this->container->get('netcom_migrations.components.migrations.status');
-
         $migrations = [];
 
-        foreach ($status->getFinishedMigrations() as $migration) {
+        foreach ($this->migrationStatus->getFinishedMigrations() as $migration) {
             $migrations[] = $this->createTableDataFromMigrationStruct($migration);
         }
 

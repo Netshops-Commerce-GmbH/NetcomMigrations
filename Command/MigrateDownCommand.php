@@ -2,6 +2,8 @@
 
 namespace NetcomMigrations\Command;
 
+use NetcomMigrations\Components\Migrations\Executor;
+use NetcomMigrations\Components\Migrations\Status;
 use NetcomMigrations\Components\Structs\MigrationStruct;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -17,6 +19,30 @@ class MigrateDownCommand extends ShopwareCommand
 {
     /** @var SymfonyStyle $io */
     private $io;
+    /** @var string $commandName */
+    private $commandName;
+    /** @var Status $migrationStatus */
+    private $migrationStatus;
+    /** @var Executor $executor */
+    private $executor;
+
+    /**
+     * MigrateDownCommand constructor.
+     *
+     * @param string   $commandName
+     * @param Status   $migrationStatus
+     * @param Executor $executor
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     */
+    public function __construct(string $commandName, Status $migrationStatus, Executor $executor)
+    {
+        $this->commandName = $commandName;
+        $this->migrationStatus = $migrationStatus;
+        $this->executor = $executor;
+
+        parent::__construct($this->commandName);
+    }
 
     /**
      * {@inheritdoc}
@@ -25,7 +51,7 @@ class MigrateDownCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('netcom:migrations:migrate:down')
+        $this->setName($this->commandName)
             ->setDescription('Runs through all pending migrations and executes their "down" method.')
             ->addArgument(
                 'rollbackSteps',
@@ -47,7 +73,7 @@ class MigrateDownCommand extends ShopwareCommand
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $migrations = $this->container->get('netcom_migrations.components.migrations.status')->getFinishedMigrations();
+        $migrations = $this->migrationStatus->getFinishedMigrations();
         $rollbackSteps = $this->getRollbackSteps($input->getArgument('rollbackSteps'));
 
         if (!\count($migrations)) {
@@ -70,9 +96,8 @@ class MigrateDownCommand extends ShopwareCommand
 
         $startTime = \microtime(true);
 
-        $executor = $this->container->get('netcom_migrations.components.migrations.executor');
-        $executor->setIo($this->io);
-        $executor->migrateDown($migrations);
+        $this->executor->setIo($this->io);
+        $this->executor->migrateDown($migrations);
 
         $this->io->note(\sprintf('Command runtime: %s seconds.', \microtime(true) - $startTime));
     }

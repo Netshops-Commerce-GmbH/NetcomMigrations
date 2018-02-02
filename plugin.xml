@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
-    <label>Netshops - Migrationen</label>
-    <version>1.0.0</version>
+    <label>Netshops - Migrations</label>
+    <version>1.0.1</version>
     <link>https://www.netshops.de</link>
     <author>Netshops Commerce GmbH</author>
     <compatibility minVersion="5.2.0"/>
@@ -10,5 +10,8 @@
     <copyright>Copyright (c) 2018 Netshops Commerce GmbH</copyright>
     <changelog version="1.0.0">
         <changes>Release</changes>
+    </changelog>
+    <changelog version="1.0.1">
+        <changes>fixed not fully qualified function calls, registered commands via services.xml and injected dependencies</changes>
     </changelog>
 </plugin>

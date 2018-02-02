@@ -2,6 +2,8 @@
 
 namespace NetcomMigrations\Command;
 
+use NetcomMigrations\Components\Migrations\Executor;
+use NetcomMigrations\Components\Migrations\Status;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,6 +17,30 @@ class MigrateUpCommand extends ShopwareCommand
 {
     /** @var SymfonyStyle $io */
     private $io;
+    /** @var string $commandName */
+    private $commandName;
+    /** @var Status $migrationStatus */
+    private $migrationStatus;
+    /** @var Executor $executor */
+    private $executor;
+
+    /**
+     * MigrateUpCommand constructor.
+     *
+     * @param string   $commandName
+     * @param Status   $migrationStatus
+     * @param Executor $executor
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     */
+    public function __construct(string $commandName, Status $migrationStatus, Executor $executor)
+    {
+        $this->commandName = $commandName;
+        $this->migrationStatus = $migrationStatus;
+        $this->executor = $executor;
+
+        parent::__construct($this->commandName);
+    }
 
     /**
      * {@inheritdoc}
@@ -23,7 +49,7 @@ class MigrateUpCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('netcom:migrations:migrate:up')
+        $this->setName($this->commandName)
             ->setDescription('Runs through all pending migrations and executes their "up" method.')
             ->addArgument(
                 'version',
@@ -35,13 +61,14 @@ class MigrateUpCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      *
+     * @throws \InvalidArgumentException
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $migrations = $this->container->get('netcom_migrations.components.migrations.status')->getPendingMigrations(
+        $migrations = $this->migrationStatus->getPendingMigrations(
             $input->hasArgument('version') ? $input->getArgument('version') : ''
         );
 
@@ -53,9 +80,8 @@ class MigrateUpCommand extends ShopwareCommand
 
         $startTime = \microtime(true);
 
-        $executor = $this->container->get('netcom_migrations.components.migrations.executor');
-        $executor->setIo($this->io);
-        $executor->migrateUp($migrations);
+        $this->executor->setIo($this->io);
+        $this->executor->migrateUp($migrations);
 
         $this->io->note(\sprintf('Command runtime: %s seconds.', \microtime(true) - $startTime));
     }
