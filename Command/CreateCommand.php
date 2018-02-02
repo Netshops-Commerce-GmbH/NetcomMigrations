@@ -2,7 +2,7 @@
 
 namespace NetcomMigrations\Command;
 
-use NetcomMigrations\NetcomMigrations;
+use NetcomMigrations\Components\StubGenerator;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +14,39 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateCommand extends ShopwareCommand
 {
+    /** @var string $commandName */
+    private $commandName;
+    /** @var string $stubsDir */
+    private $stubsDir;
+    /** @var string $migrationsDir */
+    private $migrationsDir;
+    /** @var StubGenerator $stubGenerator */
+    private $stubGenerator;
+
+    /**
+     * CreateCommand constructor.
+     *
+     * @param string        $commandName
+     * @param string        $stubsDir
+     * @param string        $migrationsDir
+     * @param StubGenerator $stubGenerator
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     */
+    public function __construct(
+        string $commandName,
+        string $stubsDir,
+        string $migrationsDir,
+        StubGenerator $stubGenerator
+    ) {
+        $this->commandName = $commandName;
+        $this->stubsDir = $stubsDir;
+        $this->migrationsDir = $migrationsDir;
+        $this->stubGenerator = $stubGenerator;
+
+        parent::__construct($this->commandName);
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -21,7 +54,7 @@ class CreateCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('netcom:migrations:create')
+        $this->setName($this->commandName)
             ->setDescription('Creates a new migration class.')
             ->addArgument(
                 'version',
@@ -43,16 +76,14 @@ class CreateCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $stubsDir = $this->container->getParameter(NetcomMigrations::CONTAINER_PREFIX . '.stubs_dir');
-        $migrationsDir = $this->container->getParameter(NetcomMigrations::CONTAINER_PREFIX . '.migrations_dir');
         $name = $input->getArgument('name');
         $version = $input->getArgument('version');
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $path = $this->container->get('netcom_migrations.components.stub_generator')->generate(
-                $stubsDir . '/MigrationClass.stub',
-                $migrationsDir . '/' . $version . '/' . \date('YmdHis') . '_' . $name . '.php',
+            $path = $this->stubGenerator->generate(
+                $this->stubsDir . '/MigrationClass.stub',
+                $this->migrationsDir . '/' . $version . '/' . \date('YmdHis') . '_' . $name . '.php',
                 [
                     ':CLASS:' => \ucfirst($name) . \date('YmdHis'),
                 ]
