@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
-    <label>Netshops - Migrationen</label>
+    <label>Netshops - Migrations</label>
     <version>1.0.0</version>
     <link>https://www.netshops.de</link>
     <author>Netshops Commerce GmbH</author>
