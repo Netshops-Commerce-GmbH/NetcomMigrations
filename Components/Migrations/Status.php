@@ -2,6 +2,7 @@
 
 namespace NetcomMigrations\Components\Migrations;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use NetcomMigrations\Components\Dbal\MigrationsGateway;
 use NetcomMigrations\Components\Structs\MigrationStruct;
 
@@ -13,19 +14,19 @@ class Status
     /** @var MigrationsGateway $migrationsGateway */
     private $migrationsGateway;
 
-    /** @var string $migrationsDir */
-    private $migrationsDir;
+    /** @var ArrayCollection $migrationDirs */
+    private $migrationDirs;
 
     /**
      * Status constructor.
      *
      * @param MigrationsGateway $migrationsGateway
-     * @param string            $migrationsDir
+     * @param ArrayCollection   $migrationsDirs
      */
-    public function __construct(MigrationsGateway $migrationsGateway, string $migrationsDir)
+    public function __construct(MigrationsGateway $migrationsGateway, ArrayCollection $migrationsDirs)
     {
         $this->migrationsGateway = $migrationsGateway;
-        $this->migrationsDir = $migrationsDir;
+        $this->migrationDirs = $migrationsDirs;
     }
 
     /**
@@ -80,13 +81,24 @@ class Status
      */
     public function getAllMigrations(): array
     {
-        $paths = \glob($this->migrationsDir . '/**/*.php');
+        $paths = [];
+
+        foreach ($this->migrationDirs as $migrationConfig) {
+            $pluginName = \array_keys($migrationConfig)[0];
+            $migrationPaths = \glob(\reset($migrationConfig) . '/**/*.php');
+
+            if (\count($migrationPaths)) {
+                $paths[$pluginName] = $migrationPaths;
+            }
+        }
 
         if (!\count($paths)) {
             return [];
         }
 
-        return $this->buildMigrationStructs($paths);
+        $migrationStructs = $this->buildMigrationStructs($paths);
+
+        return $this->sortMigrationStructs($migrationStructs);
     }
 
     /**
@@ -100,8 +112,11 @@ class Status
         $processedMigrations = $this->migrationsGateway->getProcessedMigrations();
         $migrationStructs = [];
 
-        foreach ($paths as $path) {
-            $migrationStructs[] = $this->buildMigrationStruct($path, $processedMigrations);
+        foreach ($paths as $pluginName => $pluginPaths) {
+            /** @var array $pluginPaths */
+            foreach ($pluginPaths as $pluginPath) {
+                $migrationStructs[] = $this->buildMigrationStruct($pluginPath, $pluginName, $processedMigrations);
+            }
         }
 
         return $migrationStructs;
@@ -109,11 +124,12 @@ class Status
 
     /**
      * @param string $path
+     * @param string $pluginName
      * @param array  $processedMigrations
      *
      * @return MigrationStruct
      */
-    private function buildMigrationStruct($path, $processedMigrations): MigrationStruct
+    private function buildMigrationStruct($path, $pluginName, $processedMigrations): MigrationStruct
     {
         $migration = \pathinfo($path, \PATHINFO_FILENAME);
         $version = \basename(\dirname($path));
@@ -130,8 +146,29 @@ class Status
 
         return new MigrationStruct(
             $path,
+            $pluginName,
             $startDate,
             $finishDate
         );
+    }
+
+    /**
+     * @param MigrationStruct[] $migrationStructs
+     *
+     * @return MigrationStruct[]
+     */
+    private function sortMigrationStructs(array $migrationStructs): array
+    {
+        \usort(
+            $migrationStructs,
+            function ($a, $b) {
+                /** @var MigrationStruct $a */
+                /** @var MigrationStruct $b */
+
+                return \version_compare($a->getVersion(), $b->getVersion());
+            }
+        );
+
+        return $migrationStructs;
     }
 }

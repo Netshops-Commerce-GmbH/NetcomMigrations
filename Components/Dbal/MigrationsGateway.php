@@ -51,6 +51,7 @@ class MigrationsGateway
             self::TABLE_NETCOM_MIGRATIONS,
             [
                 'version'    => $migration->getVersion(),
+                'plugin'     => $migration->getPluginName(),
                 'migration'  => $migration->getMigration(),
                 'start_date' => (new \DateTime())->format('Y-m-d H:i:s'),
             ]
@@ -77,18 +78,20 @@ class MigrationsGateway
 
     /**
      * @param string $version
+     * @param string $pluginName
      * @param string $migration
      *
      * @return int
      *
      * @throws InvalidArgumentException
      */
-    public function delete($version, $migration): int
+    public function delete($version, $pluginName, $migration): int
     {
         return $this->connection->delete(
             self::TABLE_NETCOM_MIGRATIONS,
             [
                 'version'   => $version,
+                'plugin'    => $pluginName,
                 'migration' => $migration,
             ]
         );

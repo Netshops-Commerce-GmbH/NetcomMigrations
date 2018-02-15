@@ -119,6 +119,7 @@ class StatusCommand extends ShopwareCommand
         return [
             'status'     => $migration->isPending() ? 'pending' : 'finished',
             'version'    => $migration->getVersion(),
+            'plugin'     => $migration->getPluginName(),
             'migration'  => $migration->getMigration(),
             'startDate'  => $startDate instanceof \DateTime ? $startDate->format('Y-m-d H:i:s') : '',
             'finishDate' => $finishDate instanceof \DateTime ? $finishDate->format('Y-m-d H:i:s') : '',
