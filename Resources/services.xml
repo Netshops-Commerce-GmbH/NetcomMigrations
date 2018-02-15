@@ -12,8 +12,10 @@
 
     <services>
         <!-- Services -->
-        <service id="netcom_migrations.components.file_tokenizer" class="NetcomMigrations\Components\FileTokenizer" public="false"/>
-        <service id="netcom_migrations.components.stub_generator" class="NetcomMigrations\Components\StubGenerator" public="false"/>
+        <service id="netcom_migrations.components.file_tokenizer" class="NetcomMigrations\Components\FileTokenizer"
+                 public="false"/>
+        <service id="netcom_migrations.components.stub_generator" class="NetcomMigrations\Components\StubGenerator"
+                 public="false"/>
         <service id="netcom_migrations.components.dbal.migrations_gateway"
                  class="NetcomMigrations\Components\Dbal\MigrationsGateway" public="false">
             <argument type="service" id="dbal_connection"/>
@@ -26,21 +28,40 @@
             <argument type="service" id="netcom_migrations.components.dbal.migrations_gateway"/>
             <argument type="service" id="service_container"/>
         </service>
+        <service id="netcom_migrations.components.migrations.migration_dirs_collector"
+                 class="NetcomMigrations\Components\Migrations\MigrationDirsCollector">
+            <argument type="service" id="events"/>
+        </service>
+        <service id="netcom_migrations.components.migrations.migration_dirs_collector_factory"
+                 class="Doctrine\Common\Collections\ArrayCollection">
+            <factory service="netcom_migrations.components.migrations.migration_dirs_collector" method="getMigrationDirs"/>
+        </service>
         <service id="netcom_migrations.components.migrations.status"
                  class="NetcomMigrations\Components\Migrations\Status" public="false">
             <argument type="service" id="netcom_migrations.components.dbal.migrations_gateway"/>
+            <argument type="service" id="netcom_migrations.components.migrations.migration_dirs_collector_factory"/>
+        </service>
+
+        <!-- Event listeners -->
+        <service id="netcom_migrations.subscriber.migrations_collector"
+                 class="NetcomMigrations\Subscriber\MigrationsCollector">
+            <argument>%netcom_migrations.plugin_name%</argument>
             <argument>%netcom_migrations.migrations_dir%</argument>
+            <tag name="shopware.event_listener" method="onCollectMigrations"
+                 event="NetcomMigrations_Collect_Migrations"/>
         </service>
 
         <!-- Console commands -->
         <service id="netcom_migrations.command.create_command" class="NetcomMigrations\Command\CreateCommand">
             <argument>%netcom_migrations.command.create.name%</argument>
             <argument>%netcom_migrations.stubs_dir%</argument>
-            <argument>%netcom_migrations.migrations_dir%</argument>
+            <argument>%netcom_migrations.plugin_name%</argument>
+            <argument type="service" id="netcom_migrations.components.migrations.migration_dirs_collector_factory"/>
             <argument type="service" id="netcom_migrations.components.stub_generator"/>
             <tag name="console.command"/>
         </service>
-        <service id="netcom_migrations.command.migrate_down_command" class="NetcomMigrations\Command\MigrateDownCommand">
+        <service id="netcom_migrations.command.migrate_down_command"
+                 class="NetcomMigrations\Command\MigrateDownCommand">
             <argument>%netcom_migrations.command.migrate_down_command.name%</argument>
             <argument type="service" id="netcom_migrations.components.migrations.status"/>
             <argument type="service" id="netcom_migrations.components.migrations.executor"/>

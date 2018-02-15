@@ -9,6 +9,8 @@ class MigrationStruct
 {
     /** @var string $path */
     private $path;
+    /** @var string $pluginName */
+    private $pluginName;
     /** @var \DateTime|null $startDate */
     private $startDate;
     /** @var \DateTime|null $finishDate */
@@ -18,15 +20,18 @@ class MigrationStruct
      * MigrationStruct constructor.
      *
      * @param string         $path
+     * @param string         $pluginName
      * @param \DateTime|null $startDate
      * @param \DateTime|null $finishDate
      */
     public function __construct(
         string $path,
+        string $pluginName,
         $startDate,
         $finishDate
     ) {
         $this->path = $path;
+        $this->pluginName = $pluginName;
         $this->startDate = $startDate;
         $this->finishDate = $finishDate;
     }
@@ -37,6 +42,14 @@ class MigrationStruct
     public function getPath(): string
     {
         return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluginName(): string
+    {
+        return $this->pluginName;
     }
 
     /**

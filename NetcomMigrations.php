@@ -2,11 +2,6 @@
 
 namespace NetcomMigrations;
 
-use NetcomMigrations\Command\CreateCommand;
-use NetcomMigrations\Command\MigrateDownCommand;
-use NetcomMigrations\Command\MigrateUpCommand;
-use NetcomMigrations\Command\StatusCommand;
-use Shopware\Components\Console\Application;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,8 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class NetcomMigrations extends Plugin
 {
-    const CONTAINER_PREFIX = 'netcom_migrations';
-
     /**
      * @param InstallContext $context
      *
@@ -58,9 +51,10 @@ class NetcomMigrations extends Plugin
     }
 
     /**
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \RuntimeException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function executeInstallSql()
     {

@@ -2,7 +2,7 @@
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label>Netshops - Migrations</label>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <link>https://www.netshops.de</link>
     <author>Netshops Commerce GmbH</author>
     <compatibility minVersion="5.2.0"/>
@@ -13,5 +13,8 @@
     </changelog>
     <changelog version="1.0.1">
         <changes>fixed not fully qualified function calls, registered commands via services.xml and injected dependencies</changes>
+    </changelog>
+    <changelog version="1.1.0">
+        <changes>Added support for other plugins to register migration directories.</changes>
     </changelog>
 </plugin>
