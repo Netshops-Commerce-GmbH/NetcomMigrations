@@ -104,7 +104,11 @@ class Executor
             $instance->down();
             unset($instance);
 
-            $this->migrationsGateway->delete($migration->getVersion(), $migration->getMigration());
+            $this->migrationsGateway->delete(
+                $migration->getVersion(),
+                $migration->getPluginName(),
+                $migration->getMigration()
+            );
 
             $this->onAfterMigrate($migration, $startTime);
         }
