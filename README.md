@@ -1,5 +1,7 @@
 # Shopware Migrations Plugin
 
+[![Join the chat at https://gitter.im/Netshops-Commerce-GmbH/NetcomMigrations](https://badges.gitter.im/Netshops-Commerce-GmbH/NetcomMigrations.svg)](https://gitter.im/Netshops-Commerce-GmbH/NetcomMigrations?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## How does it work?
 
 ```bash
