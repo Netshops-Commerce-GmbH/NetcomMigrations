@@ -26,7 +26,7 @@ class MigrationDirsCollector
      * @return ArrayCollection
      * @throws \Enlight_Event_Exception
      */
-    public function getMigrationDirs(): ArrayCollection
+    public function getMigrationDirs() : ArrayCollection
     {
         $collection = new ArrayCollection();
 

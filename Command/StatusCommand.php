@@ -80,7 +80,7 @@ class StatusCommand extends ShopwareCommand
      * @return array
      * @throws \Exception
      */
-    private function getPendingMigrations(): array
+    private function getPendingMigrations() : array
     {
         $migrations = [];
 
@@ -95,7 +95,7 @@ class StatusCommand extends ShopwareCommand
      * @return array
      * @throws \Exception
      */
-    private function getFinishedMigrations(): array
+    private function getFinishedMigrations() : array
     {
         $migrations = [];
 
@@ -111,17 +111,17 @@ class StatusCommand extends ShopwareCommand
      *
      * @return array
      */
-    private function createTableDataFromMigrationStruct(MigrationStruct $migration): array
+    private function createTableDataFromMigrationStruct(MigrationStruct $migration) : array
     {
         $startDate = $migration->getStartDate();
         $finishDate = $migration->getFinishDate();
 
         return [
-            'status'     => $migration->isPending() ? 'pending' : 'finished',
-            'version'    => $migration->getVersion(),
-            'plugin'     => $migration->getPluginName(),
-            'migration'  => $migration->getMigration(),
-            'startDate'  => $startDate instanceof \DateTime ? $startDate->format('Y-m-d H:i:s') : '',
+            'status' => $migration->isPending() ? 'pending' : 'finished',
+            'version' => $migration->getVersion(),
+            'plugin' => $migration->getPluginName(),
+            'migration' => $migration->getMigration(),
+            'startDate' => $startDate instanceof \DateTime ? $startDate->format('Y-m-d H:i:s') : '',
             'finishDate' => $finishDate instanceof \DateTime ? $finishDate->format('Y-m-d H:i:s') : '',
         ];
     }

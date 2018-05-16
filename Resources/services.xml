@@ -34,7 +34,8 @@
         </service>
         <service id="netcom_migrations.components.migrations.migration_dirs_collector_factory"
                  class="Doctrine\Common\Collections\ArrayCollection">
-            <factory service="netcom_migrations.components.migrations.migration_dirs_collector" method="getMigrationDirs"/>
+            <factory service="netcom_migrations.components.migrations.migration_dirs_collector"
+                     method="getMigrationDirs"/>
         </service>
         <service id="netcom_migrations.components.migrations.status"
                  class="NetcomMigrations\Components\Migrations\Status" public="false">

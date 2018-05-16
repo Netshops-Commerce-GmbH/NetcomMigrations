@@ -20,7 +20,7 @@ class StubGenerator
      *
      * @throws RuntimeException
      */
-    public function generate(string $stubPath, string $targetPath, array $replacements): string
+    public function generate(string $stubPath, string $targetPath, array $replacements) : string
     {
         if (\file_exists($targetPath)) {
             throw new RuntimeException(\sprintf('Cannot generate file. Target "%s" already exists.', $targetPath));

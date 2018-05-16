@@ -109,7 +109,7 @@ class MigrateDownCommand extends ShopwareCommand
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
-    private function getRollbackSteps(string $rollbackSteps): int
+    private function getRollbackSteps(string $rollbackSteps) : int
     {
         if (!\is_numeric($rollbackSteps)) {
             throw new InvalidArgumentException('Argument 1 needs to be a numeric value.');
@@ -124,7 +124,7 @@ class MigrateDownCommand extends ShopwareCommand
      *
      * @return array
      */
-    private function sliceMigrations(array $migrations, int $rollbackSteps): array
+    private function sliceMigrations(array $migrations, int $rollbackSteps) : array
     {
         return \array_slice(
             \array_reverse($migrations),
@@ -138,7 +138,7 @@ class MigrateDownCommand extends ShopwareCommand
      *
      * @return array
      */
-    private function getMigrationListing(array $migrations): array
+    private function getMigrationListing(array $migrations) : array
     {
         return \array_map(
             function ($migration) {

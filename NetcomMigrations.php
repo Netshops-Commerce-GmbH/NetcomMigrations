@@ -38,7 +38,7 @@ class NetcomMigrations extends Plugin
      *
      * @return string
      */
-    public function getShopwareBasePath(): string
+    public function getShopwareBasePath() : string
     {
         $path = $this->getPath();
         $parts = \explode('/', $path);
