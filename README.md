@@ -1,5 +1,7 @@
 # Shopware Migrations Plugin
 
+[![Join the chat at https://gitter.im/Netshops-Commerce-GmbH/NetcomMigrations](https://badges.gitter.im/Netshops-Commerce-GmbH/NetcomMigrations.svg)](https://gitter.im/Netshops-Commerce-GmbH/NetcomMigrations?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## How does it work?
 
 ```bash
@@ -18,11 +20,16 @@ $ php bin/console netcom:migrations
 
 Usage:
 ```bash
-$ php bin/console netcom:migrations:create <version> <name>
+$ php bin/console netcom:migrations:create <version> <name> [<plugin>]
 ```
 
 This command will create a new migration class in the `Migrations/` directory.
 The migration class is created from `Resources/Stubs/MigrationClass.stub`, in case you want to modify it.
+
+The `plugin` parameter is optional. This basically creates the migration in the given migration directory of a plugin.
+The default value for this parameter is `NetcomMigrations`.
+
+For further information see: [Encapsulating migrations in plugins](#encapsulating-migrations-in-plugins)
 
 ### netcom:migrations:status
 
@@ -38,19 +45,19 @@ Example output:
 $ php bin/console netcom:migrations:status
 
 Pending migrations (in order which they would be executed):
- --------- --------- ------------------------------------------- ----------- ------------ 
-  status    version   migration                                   startDate   finishDate  
- --------- --------- ------------------------------------------- ----------- ------------ 
-  pending   1.0.0     20180201134801_ImportProductionCategories                           
-  pending   1.0.0     20180201145401_ImportProductionArticles                             
- --------- --------- ------------------------------------------- ----------- ------------ 
+ --------- ---------  ------------------------ ------------------------------------------- ----------- ------------ 
+  status    version    plugin                   migration                                   startDate   finishDate  
+ --------- ---------  ------------------------ ------------------------------------------- ----------- ------------ 
+  pending   1.0.0      NetcomMigrations         20180201134801_ImportProductionCategories                           
+  pending   1.0.0      NetcomMigrations         20180201145401_ImportProductionArticles                             
+ --------- ---------  ------------------------ ------------------------------------------- ----------- ------------ 
 
 Finished migrations (in order which they have been exectued):
- ---------- --------- ----------------------------------------------- --------------------- --------------------- 
-  status     version   migration                                       startDate             finishDate           
- ---------- --------- ----------------------------------------------- --------------------- --------------------- 
-  finished   1.0.0     20180131173842_ImportProductionShopwareConfig   2018-02-02 12:41:58   2018-02-02 12:41:58  
- ---------- --------- ----------------------------------------------- --------------------- ---------------------
+ ---------- --------- ------------------------ ----------------------------------------------- --------------------- --------------------- 
+  status     version   plugin                   migration                                       startDate             finishDate           
+ ---------- --------- ------------------------ ----------------------------------------------- --------------------- --------------------- 
+  finished   1.0.0     NetcomMigrations         20180131173842_ImportProductionShopwareConfig   2018-02-02 12:41:58   2018-02-02 12:41:58  
+ ---------- --------- ------------------------ ----------------------------------------------- --------------------- ---------------------
 ```
 
 ### netcom:migrations:migrate:up
@@ -62,6 +69,8 @@ $ php bin/console netcom:migrations:migrate:up [<version>]
 
 This command runs through all pending migrations and executes their "up" method.
 
+The `version` parameter is optional. If you provide this parameter, only the migrations of a specific version will be applied.
+
 ### netcom:migrations:migrate:down
 
 Usage:
@@ -70,6 +79,52 @@ $ php bin/console netcom:migrations:migrate:down [<rollbackSteps>]
 ```
 
 This command runs through all pending migrations and executes their "down" method.
+
+## Encapsulating migrations in plugins
+
+In our use case we require this plugin as a git submodule and can't add our migrations to this plugin. 
+Therefore we've implemented a collect event which you can subscribe to in your own plugins.
+
+### First define the migrations directory of your plugin
+
+We do this in the build method of our plugin:
+
+```php
+/**
+ * {@inheritdoc}
+ */
+public function build(ContainerBuilder $container)
+{
+    $container->setParameter($this->getContainerPrefix() . '.migrations_dir', $this->getPath() . '/Migrations');
+
+    parent::build($container);
+}
+```
+
+### Create the event subscriber class
+
+We like to have our subscriber classes in the `Subscriber` directory of our plugin. 
+Create a file in your desired subscribers directory with the following contents: [Subscriber/MigrationsCollector.php](Subscriber/MigrationsCollector.php)
+
+The only thing you'll have to change is the namespace, of course.
+
+### Add the event subscriber to your `services.xml`
+
+To register your own `MigrationsCollector`, simply register it in your `services.xml`:
+
+```xml
+<service id="example_plugin.subscriber.migrations_collector"
+         class="ExamplePlugin\Subscriber\MigrationsCollector">
+    <argument>%example_plugin.plugin_name%</argument>
+    <argument>%example_plugin.migrations_dir%</argument>
+    <tag name="shopware.event_listener" 
+         method="onCollectMigrations" 
+         event="NetcomMigrations_Collect_Migrations"/>
+</service>
+```
+
+That should do the trick! Now you can provide migrations with your own plugin. The advantages should be clear: 
+The migrations are in the right context and you don't have to touch the `NetcomMigrations` plugin.
 
 ## Writing Migrations
 
@@ -134,7 +189,9 @@ New variables have to be defined in `\NetcomMigrations\Command\CreateCommand` wh
 
 ## ToDo
 
-- Implement a DI container tag that allows other plugins to register a MigrationStructCollector which would support providing migrations in the context of plugins.
+- Add unit tests.
+- Add CLI option to `MigrateDownCommand` and `MigrateUpCommand` to toggle the maintenance mode while migrations are running.
+- Add CLI option to `MigrateDownCommand` and `MigrateUpCommand` for auto-rollback if a migration fails.
 
 ## Contributing
 

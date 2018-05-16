@@ -32,7 +32,7 @@ class Migration implements ContainerAwareInterface
      *
      * @return string
      */
-    public function getVersion(): string
+    public function getVersion() : string
     {
         return \basename(__DIR__);
     }
@@ -42,7 +42,7 @@ class Migration implements ContainerAwareInterface
      *
      * @return string
      */
-    public function getName(): string
+    public function getName() : string
     {
         return self::class;
     }
@@ -52,7 +52,7 @@ class Migration implements ContainerAwareInterface
      *
      * @return SymfonyStyle
      */
-    public function getIO(): SymfonyStyle
+    public function getIO() : SymfonyStyle
     {
         return $this->io;
     }
@@ -97,7 +97,7 @@ class Migration implements ContainerAwareInterface
      *
      * @return ContainerInterface
      */
-    protected function getContainer(): ContainerInterface
+    protected function getContainer() : ContainerInterface
     {
         return $this->container;
     }

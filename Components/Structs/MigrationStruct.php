@@ -9,6 +9,8 @@ class MigrationStruct
 {
     /** @var string $path */
     private $path;
+    /** @var string $pluginName */
+    private $pluginName;
     /** @var \DateTime|null $startDate */
     private $startDate;
     /** @var \DateTime|null $finishDate */
@@ -18,15 +20,18 @@ class MigrationStruct
      * MigrationStruct constructor.
      *
      * @param string         $path
+     * @param string         $pluginName
      * @param \DateTime|null $startDate
      * @param \DateTime|null $finishDate
      */
     public function __construct(
         string $path,
+        string $pluginName,
         $startDate,
         $finishDate
     ) {
         $this->path = $path;
+        $this->pluginName = $pluginName;
         $this->startDate = $startDate;
         $this->finishDate = $finishDate;
     }
@@ -34,7 +39,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getPath() : string
     {
         return $this->path;
     }
@@ -42,7 +47,15 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getFileName(): string
+    public function getPluginName() : string
+    {
+        return $this->pluginName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileName() : string
     {
         return \pathinfo($this->path, \PATHINFO_FILENAME);
     }
@@ -50,7 +63,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getMigration(): string
+    public function getMigration() : string
     {
         return \basename($this->getFileName(), '.php');
     }
@@ -58,7 +71,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getVersion(): string
+    public function getVersion() : string
     {
         return \basename(\dirname($this->path));
     }
@@ -82,7 +95,7 @@ class MigrationStruct
     /**
      * @return bool
      */
-    public function isFinished(): bool
+    public function isFinished() : bool
     {
         return $this->startDate !== null && $this->finishDate !== null;
     }
@@ -90,7 +103,7 @@ class MigrationStruct
     /**
      * @return bool
      */
-    public function isPending(): bool
+    public function isPending() : bool
     {
         return !$this->isFinished();
     }

@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
-    <label>Netshops - Migrationen</label>
-    <version>1.0.0</version>
+    <label>Netshops - Migrations</label>
+    <version>1.1.1</version>
     <link>https://www.netshops.de</link>
     <author>Netshops Commerce GmbH</author>
     <compatibility minVersion="5.2.0"/>
     <description>Provides the migration system.</description>
-    <copyright>Copyright (c) 2018 Netshops Commerce GmbH</copyright>
+    <copyright>Netshops Commerce GmbH</copyright>
     <changelog version="1.0.0">
-        <changes>Release</changes>
+        <changes>Release of this plugin.</changes>
+    </changelog>
+    <changelog version="1.0.1">
+        <changes>Fix not fully qualified function calls, register commands via services.xml and inject dependencies.
+        </changes>
+    </changelog>
+    <changelog version="1.1.0">
+        <changes>Add support for other plugins to register migration directories.</changes>
+    </changelog>
+    <changelog version="1.1.1">
+        <changes>Format code and add php doc.</changes>
     </changelog>
 </plugin>

@@ -12,7 +12,7 @@ class FileTokenizer
      *
      * @return string
      */
-    public function getClassFromFile($filePath): string
+    public function getClassFromFile($filePath) : string
     {
         $fileContent = \file_get_contents($filePath);
         $namespace = '';

@@ -29,7 +29,7 @@ class MigrationsGateway
     /**
      * @return array
      */
-    public function getProcessedMigrations(): array
+    public function getProcessedMigrations() : array
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -50,8 +50,9 @@ class MigrationsGateway
         $this->connection->insert(
             self::TABLE_NETCOM_MIGRATIONS,
             [
-                'version'    => $migration->getVersion(),
-                'migration'  => $migration->getMigration(),
+                'version' => $migration->getVersion(),
+                'plugin' => $migration->getPluginName(),
+                'migration' => $migration->getMigration(),
                 'start_date' => (new \DateTime())->format('Y-m-d H:i:s'),
             ]
         );
@@ -77,18 +78,20 @@ class MigrationsGateway
 
     /**
      * @param string $version
+     * @param string $pluginName
      * @param string $migration
      *
      * @return int
      *
      * @throws InvalidArgumentException
      */
-    public function delete($version, $migration): int
+    public function delete($version, $pluginName, $migration) : int
     {
         return $this->connection->delete(
             self::TABLE_NETCOM_MIGRATIONS,
             [
-                'version'   => $version,
+                'version' => $version,
+                'plugin' => $pluginName,
                 'migration' => $migration,
             ]
         );
