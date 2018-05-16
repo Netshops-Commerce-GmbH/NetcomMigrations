@@ -119,11 +119,11 @@ class CreateCommand extends ShopwareCommand
     }
 
     /**
-     * @param $plugin
+     * @param string $plugin
      *
      * @return string
      */
-    private function getMigrationDirByPlugin($plugin): string
+    private function getMigrationDirByPlugin(string $plugin) : string
     {
         foreach ($this->migrationDirs as $migrationDir) {
             if (\array_keys($migrationDir)[0] === $plugin) {

@@ -28,7 +28,7 @@ class MigrationsCollector
     /**
      * @return array
      */
-    public function onCollectMigrations(): array
+    public function onCollectMigrations() : array
     {
         return [$this->pluginName => $this->migrationsDir];
     }
