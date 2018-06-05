@@ -8,13 +8,16 @@ namespace NetcomMigrations\Components\Structs;
 class MigrationStruct
 {
     /** @var string $path */
-    private $path;
+    protected $path;
+
     /** @var string $pluginName */
-    private $pluginName;
+    protected $pluginName;
+
     /** @var \DateTime|null $startDate */
-    private $startDate;
+    protected $startDate;
+
     /** @var \DateTime|null $finishDate */
-    private $finishDate;
+    protected $finishDate;
 
     /**
      * MigrationStruct constructor.
@@ -39,7 +42,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getPath() : string
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -47,7 +50,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getPluginName() : string
+    public function getPluginName(): string
     {
         return $this->pluginName;
     }
@@ -55,7 +58,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getFileName() : string
+    public function getFileName(): string
     {
         return \pathinfo($this->path, \PATHINFO_FILENAME);
     }
@@ -63,7 +66,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getMigration() : string
+    public function getMigration(): string
     {
         return \basename($this->getFileName(), '.php');
     }
@@ -71,7 +74,7 @@ class MigrationStruct
     /**
      * @return string
      */
-    public function getVersion() : string
+    public function getVersion(): string
     {
         return \basename(\dirname($this->path));
     }
@@ -95,7 +98,7 @@ class MigrationStruct
     /**
      * @return bool
      */
-    public function isFinished() : bool
+    public function isFinished(): bool
     {
         return $this->startDate !== null && $this->finishDate !== null;
     }
@@ -103,7 +106,7 @@ class MigrationStruct
     /**
      * @return bool
      */
-    public function isPending() : bool
+    public function isPending(): bool
     {
         return !$this->isFinished();
     }

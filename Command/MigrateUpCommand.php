@@ -16,13 +16,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MigrateUpCommand extends ShopwareCommand
 {
     /** @var SymfonyStyle $io */
-    private $io;
+    protected $io;
+
     /** @var string $commandName */
-    private $commandName;
+    protected $commandName;
+
     /** @var Status $migrationStatus */
-    private $migrationStatus;
+    protected $migrationStatus;
+
     /** @var Executor $executor */
-    private $executor;
+    protected $executor;
 
     /**
      * MigrateUpCommand constructor.

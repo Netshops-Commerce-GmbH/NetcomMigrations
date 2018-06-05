@@ -1,4 +1,4 @@
-CREATE TABLE `s_plugin_netcom_migrations`
+CREATE TABLE IF NOT EXISTS `s_plugin_netcom_migrations`
 (
   `id`          INT(11) NOT NULL auto_increment,
   `version`     VARCHAR(32) collate utf8_unicode_ci NOT NULL,
