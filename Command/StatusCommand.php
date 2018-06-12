@@ -16,10 +16,12 @@ class StatusCommand extends ShopwareCommand
 {
     /** @var SymfonyStyle $io */
     protected $io;
+
     /** @var string $commandName */
-    private $commandName;
+    protected $commandName;
+
     /** @var Status $migrationStatus */
-    private $migrationStatus;
+    protected $migrationStatus;
 
     /**
      * StatusCommand constructor.
@@ -80,7 +82,7 @@ class StatusCommand extends ShopwareCommand
      * @return array
      * @throws \Exception
      */
-    private function getPendingMigrations() : array
+    protected function getPendingMigrations(): array
     {
         $migrations = [];
 
@@ -95,7 +97,7 @@ class StatusCommand extends ShopwareCommand
      * @return array
      * @throws \Exception
      */
-    private function getFinishedMigrations() : array
+    protected function getFinishedMigrations(): array
     {
         $migrations = [];
 
@@ -111,7 +113,7 @@ class StatusCommand extends ShopwareCommand
      *
      * @return array
      */
-    private function createTableDataFromMigrationStruct(MigrationStruct $migration) : array
+    protected function createTableDataFromMigrationStruct(MigrationStruct $migration): array
     {
         $startDate = $migration->getStartDate();
         $finishDate = $migration->getFinishDate();
