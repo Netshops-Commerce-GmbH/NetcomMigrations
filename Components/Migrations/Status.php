@@ -12,10 +12,10 @@ use NetcomMigrations\Components\Structs\MigrationStruct;
 class Status
 {
     /** @var MigrationsGateway $migrationsGateway */
-    private $migrationsGateway;
+    protected $migrationsGateway;
 
     /** @var ArrayCollection $migrationDirs */
-    private $migrationDirs;
+    protected $migrationDirs;
 
     /**
      * Status constructor.
@@ -34,7 +34,7 @@ class Status
      *
      * @return MigrationStruct[]
      */
-    public function getPendingMigrations($version = '') : array
+    public function getPendingMigrations($version = ''): array
     {
         return \array_filter(
             $this->getAllMigrations(),
@@ -52,7 +52,7 @@ class Status
     /**
      * @return MigrationStruct[]
      */
-    public function getFinishedMigrations() : array
+    public function getFinishedMigrations(): array
     {
         $migrations = \array_filter(
             $this->getAllMigrations(),
@@ -79,7 +79,7 @@ class Status
     /**
      * @return array
      */
-    public function getAllMigrations() : array
+    public function getAllMigrations(): array
     {
         $paths = [];
 
@@ -106,7 +106,7 @@ class Status
      *
      * @return MigrationStruct[]
      */
-    private function buildMigrationStructs(array $paths) : array
+    protected function buildMigrationStructs(array $paths): array
     {
         /** @var MigrationStruct[] $processedMigrations */
         $processedMigrations = $this->migrationsGateway->getProcessedMigrations();
@@ -129,7 +129,7 @@ class Status
      *
      * @return MigrationStruct
      */
-    private function buildMigrationStruct($path, $pluginName, $processedMigrations) : MigrationStruct
+    protected function buildMigrationStruct($path, $pluginName, $processedMigrations): MigrationStruct
     {
         $migration = \pathinfo($path, \PATHINFO_FILENAME);
         $version = \basename(\dirname($path));
@@ -157,7 +157,7 @@ class Status
      *
      * @return MigrationStruct[]
      */
-    private function sortMigrationStructs(array $migrationStructs) : array
+    protected function sortMigrationStructs(array $migrationStructs): array
     {
         \usort(
             $migrationStructs,

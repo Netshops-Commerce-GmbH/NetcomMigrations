@@ -38,7 +38,7 @@ class NetcomMigrations extends Plugin
      *
      * @return string
      */
-    public function getShopwareBasePath() : string
+    public function getShopwareBasePath(): string
     {
         $path = $this->getPath();
         $parts = \explode('/', $path);
@@ -54,9 +54,8 @@ class NetcomMigrations extends Plugin
      * @throws \RuntimeException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws \Doctrine\DBAL\DBALException
      */
-    private function executeInstallSql()
+    protected function executeInstallSql()
     {
         $sqlPath = $this->getPath() . '/Resources/sql/install.sql';
 

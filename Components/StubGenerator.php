@@ -2,8 +2,6 @@
 
 namespace NetcomMigrations\Components;
 
-use RuntimeException;
-
 /**
  * Class StubGenerator
  */
@@ -18,12 +16,12 @@ class StubGenerator
      *
      * @return string Path where the new file was created.
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
-    public function generate(string $stubPath, string $targetPath, array $replacements) : string
+    public function generate(string $stubPath, string $targetPath, array $replacements): string
     {
         if (\file_exists($targetPath)) {
-            throw new RuntimeException(\sprintf('Cannot generate file. Target "%s" already exists.', $targetPath));
+            throw new \RuntimeException(\sprintf('Cannot generate file. Target "%s" already exists.', $targetPath));
         }
 
         $contents = \file_get_contents($stubPath);
@@ -36,11 +34,11 @@ class StubGenerator
 
         // Create target directory, if it doesn't exist
         if (!\file_exists($path) && !\mkdir($path, 0776, true) && !\is_dir($path)) {
-            throw new RuntimeException(\sprintf('Cannot create directory "%s".', $path));
+            throw new \RuntimeException(\sprintf('Cannot create directory "%s".', $path));
         }
 
         if (\file_put_contents($targetPath, $contents) === false) {
-            throw new RuntimeException(\sprintf('Cannot generate file "%s".', $path));
+            throw new \RuntimeException(\sprintf('Cannot generate file "%s".', $path));
         }
 
         return $targetPath;

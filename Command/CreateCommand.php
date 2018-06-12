@@ -16,15 +16,19 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class CreateCommand extends ShopwareCommand
 {
     /** @var string $commandName */
-    private $commandName;
+    protected $commandName;
+
     /** @var string $stubsDir */
-    private $stubsDir;
+    protected $stubsDir;
+
     /** @var string $pluginName */
-    private $pluginName;
+    protected $pluginName;
+
     /** @var ArrayCollection $migrationDirs */
-    private $migrationDirs;
+    protected $migrationDirs;
+
     /** @var StubGenerator $stubGenerator */
-    private $stubGenerator;
+    protected $stubGenerator;
 
     /**
      * CreateCommand constructor.
@@ -123,7 +127,7 @@ class CreateCommand extends ShopwareCommand
      *
      * @return string
      */
-    private function getMigrationDirByPlugin(string $plugin) : string
+    protected function getMigrationDirByPlugin(string $plugin): string
     {
         foreach ($this->migrationDirs as $migrationDir) {
             if (\array_keys($migrationDir)[0] === $plugin) {

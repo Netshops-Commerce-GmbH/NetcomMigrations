@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class MigrationDirsCollector
 {
     /** @var \Enlight_Event_EventManager */
-    private $eventManager;
+    protected $eventManager;
 
     /**
      * MigrationDirsCollectorFactory constructor.
@@ -26,7 +26,7 @@ class MigrationDirsCollector
      * @return ArrayCollection
      * @throws \Enlight_Event_Exception
      */
-    public function getMigrationDirs() : ArrayCollection
+    public function getMigrationDirs(): ArrayCollection
     {
         $collection = new ArrayCollection();
 

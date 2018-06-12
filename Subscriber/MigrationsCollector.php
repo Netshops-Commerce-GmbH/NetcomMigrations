@@ -8,10 +8,10 @@ namespace NetcomMigrations\Subscriber;
 class MigrationsCollector
 {
     /** @var string $pluginName */
-    private $pluginName;
+    protected $pluginName;
 
     /** @var string $migrationsDir */
-    private $migrationsDir;
+    protected $migrationsDir;
 
     /**
      * MigrationsCollector constructor.
@@ -28,7 +28,7 @@ class MigrationsCollector
     /**
      * @return array
      */
-    public function onCollectMigrations() : array
+    public function onCollectMigrations(): array
     {
         return [$this->pluginName => $this->migrationsDir];
     }

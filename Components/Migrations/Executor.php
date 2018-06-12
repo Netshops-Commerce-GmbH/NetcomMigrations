@@ -14,16 +14,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Executor
 {
     /** @var SymfonyStyle $io */
-    private $io;
+    protected $io;
 
     /** @var FileTokenizer $fileTokenizer */
-    private $fileTokenizer;
+    protected $fileTokenizer;
 
     /** @var MigrationsGateway $migrationsGateway */
-    private $migrationsGateway;
+    protected $migrationsGateway;
 
     /** @var ContainerInterface $container */
-    private $container;
+    protected $container;
 
     /**
      * Executor constructor.
