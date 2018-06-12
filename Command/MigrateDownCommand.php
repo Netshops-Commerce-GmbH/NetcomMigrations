@@ -18,13 +18,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MigrateDownCommand extends ShopwareCommand
 {
     /** @var SymfonyStyle $io */
-    private $io;
+    protected $io;
+
     /** @var string $commandName */
-    private $commandName;
+    protected $commandName;
+
     /** @var Status $migrationStatus */
-    private $migrationStatus;
+    protected $migrationStatus;
+
     /** @var Executor $executor */
-    private $executor;
+    protected $executor;
 
     /**
      * MigrateDownCommand constructor.
@@ -109,7 +112,7 @@ class MigrateDownCommand extends ShopwareCommand
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
-    private function getRollbackSteps(string $rollbackSteps) : int
+    protected function getRollbackSteps(string $rollbackSteps): int
     {
         if (!\is_numeric($rollbackSteps)) {
             throw new InvalidArgumentException('Argument 1 needs to be a numeric value.');
@@ -124,7 +127,7 @@ class MigrateDownCommand extends ShopwareCommand
      *
      * @return array
      */
-    private function sliceMigrations(array $migrations, int $rollbackSteps) : array
+    protected function sliceMigrations(array $migrations, int $rollbackSteps): array
     {
         return \array_slice(
             \array_reverse($migrations),
@@ -138,7 +141,7 @@ class MigrateDownCommand extends ShopwareCommand
      *
      * @return array
      */
-    private function getMigrationListing(array $migrations) : array
+    protected function getMigrationListing(array $migrations): array
     {
         return \array_map(
             function ($migration) {

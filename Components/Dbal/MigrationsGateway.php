@@ -14,7 +14,7 @@ class MigrationsGateway
     const TABLE_NETCOM_MIGRATIONS = 's_plugin_netcom_migrations';
 
     /** @var Connection $connection */
-    private $connection;
+    protected $connection;
 
     /**
      * MigrationsGateway constructor.
@@ -29,7 +29,7 @@ class MigrationsGateway
     /**
      * @return array
      */
-    public function getProcessedMigrations() : array
+    public function getProcessedMigrations(): array
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -85,7 +85,7 @@ class MigrationsGateway
      *
      * @throws InvalidArgumentException
      */
-    public function delete($version, $pluginName, $migration) : int
+    public function delete($version, $pluginName, $migration): int
     {
         return $this->connection->delete(
             self::TABLE_NETCOM_MIGRATIONS,
