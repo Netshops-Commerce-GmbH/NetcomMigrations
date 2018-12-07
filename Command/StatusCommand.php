@@ -78,6 +78,7 @@ class StatusCommand extends ShopwareCommand
 
     /**
      * @return array
+     *
      * @throws \Exception
      */
     private function getPendingMigrations(): array
@@ -93,6 +94,7 @@ class StatusCommand extends ShopwareCommand
 
     /**
      * @return array
+     *
      * @throws \Exception
      */
     private function getFinishedMigrations(): array

@@ -115,7 +115,7 @@ class MigrateDownCommand extends ShopwareCommand
             throw new InvalidArgumentException('Argument 1 needs to be a numeric value.');
         }
 
-        return (int)$rollbackSteps;
+        return (int) $rollbackSteps;
     }
 
     /**
